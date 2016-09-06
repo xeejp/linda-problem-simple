@@ -3,15 +3,15 @@ import { connect } from 'react-redux'
 
 import Highcharts from 'react-highcharts'
 
-const mapStateToProps = ({ans_programmer, ans_banker, ans_each}) => ({
-  ans_programmer,
-  ans_banker,
+const mapStateToProps = ({ans_a, ans_b, ans_each}) => ({
+  ans_a,
+  ans_b,
   ans_each,
 })
 
 class App extends Component {
   render() {
-    const { ans_programmer, ans_banker, ans_each } = this.props
+    const { ans_a, ans_b, ans_each } = this.props
 
     return (
       <Highcharts 
@@ -45,8 +45,8 @@ class App extends Component {
           series: [{
             name: '人数',
             data: [
-              ['プログラマ', ans_programmer],
-              ['銀行員', ans_banker],
+              ['プログラマ', ans_a],
+              ['銀行員', ans_b],
               ['プログラマで環境保護活動家', ans_each]
             ],
             dataLabels: {

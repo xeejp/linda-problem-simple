@@ -27,9 +27,9 @@ defmodule LindaProblemSimple do
            "プログラマで自然保護活動家",
          ],
        },
-       join_experiment: 0,
-       ans_programmer: 0,
-       ans_banker: 0,
+       joined: 0,
+       ans_a: 0,
+       ans_b: 0,
        ans_each: 0,
      }}}
   end
@@ -59,7 +59,7 @@ defmodule LindaProblemSimple do
       participants = Map.put(participants, id, participant)
       data = %{data | participants: participants}
       unless data.page == "experiment" do
-        data = %{data | join_experiment: Map.size(participants)}
+        data = %{data | joined: Map.size(participants)}
       end
       action = %{
         type: "ADD_USER",
@@ -68,7 +68,7 @@ defmodule LindaProblemSimple do
       }
       participant_action = %{
         type: "ADD_USER",
-        join_experiment: data.join_experiment,
+        joined: data.joined,
       }
       {:ok, %{"data" => data, "host" => %{action: action}, "participant" => dispatch_to_all(participants, participant_action)}}
     else
@@ -84,8 +84,8 @@ defmodule LindaProblemSimple do
   def handle_received(data, %{"action" => "change page", "params" => params}) do
     data = %{data | page: params}
     unless data.page == "result" do
-      data = Map.put(data, :join_experiment, Map.size(data.participants))
-      data = Map.put(data, :ans_programmer, 0) |> Map.put(:ans_banker, 0) |> Map.put(:ans_each, 0)
+      data = Map.put(data, :joined, Map.size(data.participants))
+      data = Map.put(data, :ans_a, 0) |> Map.put(:ans_b, 0) |> Map.put(:ans_each, 0)
       participants = Enum.map(data.participants, fn {id, _} ->
         {id, new_participant(true)} end) |> Enum.into(%{})
        data = %{data | participants: participants}
@@ -95,10 +95,10 @@ defmodule LindaProblemSimple do
       page: data.page,
       text: data.text,
       users: data.participants,
-      ans_programmer: data.ans_programmer,
-      ans_banker: data.ans_banker,
+      ans_a: data.ans_a,
+      ans_b: data.ans_b,
       ans_each: data.ans_each,
-      join_experiment: data.join_experiment,
+      joined: data.joined,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
       {id, %{action: %{
@@ -106,22 +106,21 @@ defmodule LindaProblemSimple do
          page: data.page,
          text: data.text,
          status: data.participants[id].status,
-         ans_programmer: data.ans_programmer,
-         ans_banker: data.ans_banker,
+         ans_a: data.ans_a,
+         ans_b: data.ans_b,
          ans_each: data.ans_each,
-         join_experiment: data.join_experiment,
+         joined: data.joined,
        }}} end) |> Enum.into(%{})
      {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
   end
 
   def handle_received(data, %{"action" => "update text", "params" => params}) do
     data = %{data | text: params}
-    host_action = %{
-      type: "UPDATE_QUESTION",
+    action = %{
+      type: "UPDATE_TEXT",
       text: data.text,
     }
-
-    {:ok, %{"data" => data, "host" => %{action: host_action}}}
+    {:ok, %{"data" => data, "host" => %{action: action}, "participant" => dispatch_to_all(data.participants, action)}}
   end
 
   def handle_received(data, %{"action" => "fetch contents"}, id) do
@@ -130,10 +129,10 @@ defmodule LindaProblemSimple do
       page: data.page,
       text: data.text,
       status: data.participants[id].status,
-      ans_programmer: data.ans_programmer,
-      ans_banker: data.ans_banker,
+      ans_a: data.ans_a,
+      ans_b: data.ans_b,
       ans_each: data.ans_each,
-      join_experiment: data.join_experiment,
+      joined: data.joined,
     }
     {:ok, %{"data" => data, "participant" => %{id => %{action: action}}}}
   end
@@ -141,27 +140,27 @@ defmodule LindaProblemSimple do
   def handle_received(data, %{"action" => "submit answer", "params" => params}, id) do
     data = put_in(data.participants[id].status, params)
     data = case params do
-      "programmer" -> Map.put(data, :ans_programmer, data.ans_programmer + 1)
-      "banker" -> Map.put(data, :ans_banker, data.ans_banker + 1)
+      "a" -> Map.put(data, :ans_a, data.ans_a + 1)
+      "b" -> Map.put(data, :ans_b, data.ans_b + 1)
       "each" -> Map.put(data, :ans_each, data.ans_each + 1)
       _ -> nil
     end
     host_action = %{
       type: "SUBMIT_ANSWER",
       users: data.participants,
-      ans_programmer: data.ans_programmer,
-      ans_banker: data.ans_banker,
+      ans_a: data.ans_a,
+      ans_b: data.ans_b,
       ans_each: data.ans_each,
-      join_experiment: data.join_experiment,
+      joined: data.joined,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
       {id, %{action: %{
          type: "SUBMIT_ANSWER",
          status: data.participants[id].status,
-         ans_programmer: data.ans_programmer,
-         ans_banker: data.ans_banker,
+         ans_a: data.ans_a,
+         ans_b: data.ans_b,
          ans_each: data.ans_each,
-         join_experiment: data.join_experiment,
+         joined: data.joined,
        }}} end)
  {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
   end
@@ -175,6 +174,7 @@ defmodule LindaProblemSimple do
     action = %{
       type: "FINISH_DESCRIPTION",
       finish_description: data.finish_description,
+      users: data.participants,
     }
     {:ok, %{"data" => data, "host" => %{action: action}}}
   end

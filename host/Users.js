@@ -4,8 +4,13 @@ import reactCSS from 'reactcss'
 
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
+const mapStateToProps = ({page, users, text}) => ({
+  page,
+  users,
+  text,
+})
 
-function createUserStatuStr(status) {
+function createUserStatuStr(user, page, text) {
   const style = reactCSS({
     'default': {
       selected: {
@@ -17,43 +22,60 @@ function createUserStatuStr(status) {
     }
   })
 
-  return (
-    <span>
-      {
-        status == "programmer"
-        ? <span style={ style.selected }>プログラマ</span>
-        : <span style={ style.nonselect }>プログラマ</span>
-      }
-      <span>・</span>
-      {
-        status == "banker"
-        ? <span style={ style.selected }>銀行員</span>
-        : <span style={ style.nonselect }>銀行員</span>
-      }
-      <span>・</span>
-      {
-        status == "each"
-        ? <span style={ style.selected }>プログラマで環境保護活動家</span>
-        : <span style={ style.nonselect }>プログラマで環境保護活動家</span>
-      }
-    </span>
-  )
+  switch (page) {
+    case "description":
+      return (
+        <span>
+          {
+            user.is_finish_description
+            ? <span style={ style.selected }>既読</span>
+            : <span style={ style.nonselect }>既読</span>
+          }
+          <span>・</span>
+          {
+            !user.is_finish_description
+            ? <span style={ style.selected }>未読</span>
+            : <span style={ style.nonselect }>未読</span>
+          }
+        </span>
+      )
+    case "experiment":
+      return (
+        <span>
+          {
+            status == "programmer"
+            ? <span style={ style.selected }>{text.answers[0]}</span>
+            : <span style={ style.nonselect }>{text.answers[0]}</span>
+          }
+          <span>・</span>
+          {
+            status == "banker"
+            ? <span style={ style.selected }>{text.answers[1]}</span>
+            : <span style={ style.nonselect }>{text.answers[1]}</span>
+          }
+          <span>・</span>
+          {
+            status == "each"
+            ? <span style={ style.selected }>{text.answers[2]}</span>
+            : <span style={ style.nonselect }>{text.answers[2]}</span>
+          }
+        </span>
+      )
+    default:
+      return null
+  }
 }
 
-const User = ({ id, status }) => (
+const User = ({ id, user, page, text }) => (
   <tr>
     <td>{id}</td>
-    <td>{createUserStatuStr(status)}</td>
+    <td>{createUserStatuStr(user, page, text)}</td>
   </tr>
 )
 
-const mapStateToProps = ({users}) => ({
-  users,
-})
-
 class Users extends Component {
   render() {
-    const {users} = this.props
+    const {users, page, text} = this.props
 
     return (
       <Card 
@@ -79,7 +101,9 @@ class Users extends Component {
                     ? <User
                       key={id}
                       id={id}
-                      status={users[id].status}
+                      user={users[id]}
+                      page={page}
+                      text={text}
                     />
                     : null
                 )).reverse()

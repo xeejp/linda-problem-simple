@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { changePage } from './actions'
 
-const mapStateToProps = ({users, page, ans_programmer, ans_banker, ans_each, join_experiment}) => ({
+const mapStateToProps = ({users, page, ans_a, ans_b, ans_each, joined}) => ({
   users,
   page,
-  ans_programmer, 
-  ans_banker, 
+  ans_a, 
+  ans_b, 
   ans_each, 
-  join_experiment
+  joined
 })
 
 class Participants extends Component {
@@ -21,12 +21,12 @@ class Participants extends Component {
     const {
       users,
       page,
-      ans_programmer, 
-      ans_banker, 
+      ans_a, 
+      ans_b, 
       ans_each, 
-      join_experiment
+      joined
     } = this.props
-    if (page == "experiment" && join_experiment == (ans_programmer + ans_banker + ans_each)) {
+    if (page == "experiment" && joined == (ans_a + ans_b + ans_each)) {
       console.log("finished")
       const { dispatch } = this.props
       dispatch(changePage("result"))
@@ -37,7 +37,7 @@ class Participants extends Component {
           page == "waiting"
           ? <p>現在{Object.keys(users).length}人参加しています。</p>
           : page == "experiment"
-            ? <p>現在{join_experiment}人中{ans_programmer+ans_banker+ans_each}人が回答を済ませました</p>
+            ? <p>現在{joined}人中{ans_a+ans_b+ans_each}人が回答を済ませました</p>
             : null
         }
       </div>

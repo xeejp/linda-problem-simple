@@ -6,12 +6,13 @@ import LinearProgress from 'material-ui/LinearProgress';
 
 import { submitAnswer } from './actions'
 
-const mapStateToProps = ({status, ans_programmer, ans_banker, ans_each, join_experiment}) => ({
+const mapStateToProps = ({status, ans_a, ans_b, ans_each, joined, text}) => ({
   status,
-  ans_programmer,
-  ans_banker,
+  ans_a,
+  ans_b,
   ans_each,
-  join_experiment,
+  joined,
+  text,
 })
 
 class QuestionAnswers extends Component {
@@ -33,28 +34,26 @@ class QuestionAnswers extends Component {
   }
 
   render() {
-    const { status, ans_programmer, ans_banker, ans_each, join_experiment } = this.props
+    const { status, ans_a, ans_b, ans_each, joined, text } = this.props
     return (
       <div>
-        {status == null
-          ? <RadioButtonGroup name="shipSpeed" onChange={this.handleChange} defaultSelected={status} >
-            <RadioButton value="programmer" label="プログラマ" />
-            <RadioButton value="banker" label="銀行員" />
-            <RadioButton value="each" label="プログラマで環境保護活動家" />
-          </RadioButtonGroup>
-          : <RadioButtonGroup name="shipSpeed" onChange={this.handleChange} defaultSelected={status} >
-            <RadioButton value="programmer" label="プログラマ" disabled={true} />
-            <RadioButton value="banker" label="銀行員" disabled={true} />
-            <RadioButton value="each" label="プログラマで環境保護活動家" disabled={true} />
-          </RadioButtonGroup>} 
+        <RadioButtonGroup 
+          name="shipSpeed" 
+          onChange={this.handleChange} 
+          defaultSelected={status}
+        >
+          <RadioButton value="a" label={text.answers[0]} disabled={status!=null} />
+          <RadioButton value="b" label={text.answers[1]} disabled={status!=null} />
+          <RadioButton value="each" label={text.answers[2]} disabled={status!=null} />
+        </RadioButtonGroup>
 
         {
           status != null
           ? <div>
             <RaisedButton label="送信" primary={true} disabled={true} onClick={this.handleClick.bind(this)} />
-            <p>残り{join_experiment - ans_programmer - ans_banker - ans_each}名です。</p>
+            <p>残り{joined - ans_a - ans_b - ans_each}名です。</p>
             <p>しばらくお待ちください</p>
-            <LinearProgress mode="determinate" max={join_experiment} value={ans_programmer+ans_banker+ans_each} />
+            <LinearProgress mode="determinate" max={joined} value={ans_a+ans_b+ans_each} />
           </div>
           : this.state.value != null || status != null
             ? <div>

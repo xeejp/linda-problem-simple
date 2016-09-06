@@ -6,34 +6,39 @@ function reducer(state = {}, action) {
         page: action.page,
         text: action.text,
         status: action.status,
-        ans_programmer: action.ans_programmer,
-        ans_banker: action.ans_banker,
+        ans_a: action.ans_a,
+        ans_b: action.ans_b,
         ans_each: action.ans_each,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
       })
 
     case "ADD_USER":
       return Object.assign({}, state, {
-        join_experiment: action.join_experiment,
+        joined: action.joined,
       })
 
     case "CHANGE_PAGE":
       return Object.assign({}, state, {
         page: action.page,
         status: action.status,
-        ans_programmer: action.ans_programmer,
-        ans_banker: action.ans_banker,
+        ans_a: action.ans_a,
+        ans_b: action.ans_b,
         ans_each: action.ans_each,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
       })
 
     case "SUBMIT_ANSWER":
       return Object.assign({}, state, {
         status: action.status,
-        ans_programmer: action.ans_programmer,
-        ans_banker: action.ans_banker,
+        ans_a: action.ans_a,
+        ans_b: action.ans_b,
         ans_each: action.ans_each,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
+      })
+      
+    case "UPDATE_TEXT":
+      return Object.assign({}, state, {
+        text: action.text,
       })
 
     default:

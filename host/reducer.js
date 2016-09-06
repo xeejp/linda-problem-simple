@@ -14,10 +14,10 @@ const initialState = {
       "プログラマで自然保護活動家",
     ]
   },
-  ans_programmer: 0,
-  ans_banker: 0,
+  ans_a: 0,
+  ans_b: 0,
   ans_each: 0,
-  join_experiment: 0,
+  joined: 0,
 }
 
 function reducer(state = initialState, action) {
@@ -34,10 +34,10 @@ function reducer(state = initialState, action) {
         page: action.page,
         text: action.text,
         users: action.users,
-        ans_programmer: action.ans_programmer,
-        ans_banker: action.ans_banker,
+        ans_a: action.ans_a,
+        ans_b: action.ans_b,
         ans_each: action.ans_each,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
       })
 
     case "FETCH_CONTENTS":
@@ -46,23 +46,29 @@ function reducer(state = initialState, action) {
         page: action.page,
         text: action.text,
         users: action.participants,
-        ans_programmer: action.ans_programmer,
-        ans_banker: action.ans_banker,
+        ans_a: action.ans_a,
+        ans_b: action.ans_b,
         ans_each: action.ans_each,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
+      })
+
+    case "FINISH_DESCRIPTION":
+      return Object.assign({}, state, {
+        users: action.users,
+        finish_description: action.finish_description,
       })
 
     case "SUBMIT_ANSWER":
       console.log("ok")
       return Object.assign({}, state, {
         users: action.users,
-        ans_programmer: action.ans_programmer,
-        ans_banker: action.ans_banker,
+        ans_a: action.ans_a,
+        ans_b: action.ans_b,
         ans_each: action.ans_each,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
       })
 
-    case "UPDATE_QUESTION":
+    case "UPDATE_TEXT":
       return Object.assign({}, state, {
         text: action.text,
       })
