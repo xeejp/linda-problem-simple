@@ -1,1 +1,1 @@
-# Linda_Problem
+# linda-problem-simple
