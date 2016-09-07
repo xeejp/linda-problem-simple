@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import RaisedButton from 'material-ui/RaisedButton'
 import SwipeableViews from 'react-swipeable-views'
 import {Card, CardHeader, CardText} from 'material-ui/Card'
+import CircularProgress from 'material-ui/CircularProgress'
 
 import { finishDescription } from './actions'
 
@@ -42,7 +43,7 @@ class Description extends Component {
 
   render() {
     const { text } = this.props
-    if (this.state.slideIndex == this.props.text.descriptions.length-1) {
+    if (this.state.slideIndex == this.props.text.descriptions.length) {
       const { dispatch } = this.props
       dispatch(finishDescription())
     }
@@ -58,7 +59,7 @@ class Description extends Component {
                 <div key={index}>
                   <CardHeader
                     title="説明"
-                    subtitle={(index+1) + "/" + text.descriptions.length}
+                    subtitle={(index+1) + "/" + (text.descriptions.length+1)}
                   />
                   <CardText expandable={false}>
                     {description.text.split('\n').map( line => <p key={line}>{line}</p>)}
@@ -66,6 +67,18 @@ class Description extends Component {
                 </div>
               ))
             }
+            <div>
+              <CardHeader
+                title="説明"
+                subtitle={(text.descriptions.length)+1+"/"+(text.descriptions.length+1)}
+              />
+              <CardText expandable={false}>
+                <p>実験が開始されるまでしばらくお待ちください</p>
+                <div style={{textAlign: "center"}}>
+                  <CircularProgress />
+                </div>
+              </CardText>
+            </div>
           </SwipeableViews>
         </Card>
         <RaisedButton 
@@ -79,7 +92,7 @@ class Description extends Component {
           style={{float: "right"}} 
           onTouchTap={this.handleNext.bind(this)}
           primary={true} 
-          disabled={this.state.slideIndex == text.descriptions.length-1}
+          disabled={this.state.slideIndex == text.descriptions.length}
         />
       </div>
     )
