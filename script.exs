@@ -13,7 +13,7 @@ defmodule LindaProblemSimple do
     {:ok, %{"data" => %{
        page: "waiting",
        participants: %{},
-       finish_description: 0,
+       red_description: 0,
        text: %{
          descriptions: [
            %{ id: 0, text: "説明1", },
@@ -28,6 +28,7 @@ defmodule LindaProblemSimple do
          ],
        },
        joined: 0,
+       answered: 0,
        ans_a: 0,
        ans_b: 0,
        ans_each: 0,
@@ -38,12 +39,12 @@ defmodule LindaProblemSimple do
     if isactive do
       %{
         status: nil,
-        is_finish_description: false,
+        is_red_description: false,
       }
     else
       %{
         status: "noactive",
-        is_finish_description: false,
+        is_red_description: false,
       }
     end
   end
@@ -65,6 +66,7 @@ defmodule LindaProblemSimple do
         type: "ADD_USER",
         id: id,
         users: participants,
+        joined: data.joined,
       }
       participant_action = %{
         type: "ADD_USER",
@@ -86,9 +88,13 @@ defmodule LindaProblemSimple do
     unless data.page == "result" do
       data = Map.put(data, :joined, Map.size(data.participants))
       data = Map.put(data, :ans_a, 0) |> Map.put(:ans_b, 0) |> Map.put(:ans_each, 0)
+      data = Map.put(data, :answered, 0)
       participants = Enum.map(data.participants, fn {id, _} ->
         {id, new_participant(true)} end) |> Enum.into(%{})
        data = %{data | participants: participants}
+    end
+    if data.page == "description" do
+      data = %{ data | red_description: 0}
     end
     host_action = %{
       type: "CHANGE_PAGE",
@@ -98,6 +104,8 @@ defmodule LindaProblemSimple do
       ans_a: data.ans_a,
       ans_b: data.ans_b,
       ans_each: data.ans_each,
+      answered: data.answered,
+      red_description: data.red_description,
       joined: data.joined,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
@@ -139,6 +147,7 @@ defmodule LindaProblemSimple do
 
   def handle_received(data, %{"action" => "submit answer", "params" => params}, id) do
     data = put_in(data.participants[id].status, params)
+    data = %{ data | answered: data.answered+1}
     data = case params do
       "a" -> Map.put(data, :ans_a, data.ans_a + 1)
       "b" -> Map.put(data, :ans_b, data.ans_b + 1)
@@ -151,6 +160,7 @@ defmodule LindaProblemSimple do
       ans_a: data.ans_a,
       ans_b: data.ans_b,
       ans_each: data.ans_each,
+      answered: data.answered,
       joined: data.joined,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
@@ -160,6 +170,7 @@ defmodule LindaProblemSimple do
          ans_a: data.ans_a,
          ans_b: data.ans_b,
          ans_each: data.ans_each,
+         answered: data.answered,
          joined: data.joined,
        }}} end)
  {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
@@ -167,13 +178,13 @@ defmodule LindaProblemSimple do
 
   def handle_received(data, %{"action" => "finish description"}, id) do
     Logger.debug "finish description"
-    unless data.participants[id].is_finish_description do
-      data = %{data | finish_description: data.finish_description+1}
-      data = put_in(data.participants[id].is_finish_description, true)
+    unless data.participants[id].is_red_description do
+      data = %{data | red_description: data.red_description+1}
+      data = put_in(data.participants[id].is_red_description, true)
     end
     action = %{
       type: "FINISH_DESCRIPTION",
-      finish_description: data.finish_description,
+      red_description: data.red_description,
       users: data.participants,
     }
     {:ok, %{"data" => data, "host" => %{action: action}}}

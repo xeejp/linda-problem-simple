@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+
 import { Step, Stepper, StepButton} from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import { changePage } from './actions'
-
 import { getPage } from 'util/index'
 
 const pages = ["waiting", "description", "experiment", "result"]
 
-const mapStateToProps = ({page}) => ({
+const mapStateToProps = ({page, joined, answered}) => ({
   page,
+  joined,
+  answered,
 })
 
 class PageStepper extends Component {
@@ -60,8 +62,15 @@ class PageStepper extends Component {
     dispatch(changePage(page))
   }
 
+  finishExperiment() {
+    this.changePage("result")
+  }
+
   render() {
-    const { page } = this.props
+    const { page, joined, answered } = this.props
+    if (page == "experiment" && joined == answered) {
+      this.finishExperiment()
+    }
     const steps = []
     for (let i = 0; i < pages.length; i++) {
       steps[i] = (
@@ -73,17 +82,24 @@ class PageStepper extends Component {
       )
     }
     return (
-      <div style={{marginBottom: "5%"}}>
+      <div>
         <Stepper activeStep={pages.indexOf(page)} linear={false}>
           {steps}
         </Stepper>
-        {pages.indexOf(page) == 0
-          ? <RaisedButton label="戻る" disabled={true} />
-          : <RaisedButton label="戻る" onClick={this.backPage.bind(this)} />}
-          {pages.indexOf(page) == pages.length-1
-            ? <RaisedButton label="次へ" primary={true} disabled={true} />
-            : <RaisedButton label="次へ" primary={true} onClick={this.nextPage.bind(this)} />}
-          </div>
+        <RaisedButton 
+          label="戻る"
+          style={{marginLeft: '3%'}}
+          disabled={pages.indexOf(page) == 0}
+          onClick={this.backPage.bind(this)}
+        />
+        <RaisedButton
+          label="次へ" 
+          style={{marginLeft: '3%'}}
+          primary={true} 
+          disabled={pages.indexOf(page) == pages.length-1}
+          onClick={this.nextPage.bind(this)} 
+        />
+      </div>
     )
   }
 }

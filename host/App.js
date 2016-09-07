@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import Divider from 'material-ui/Divider'
+
 import { fetchContents } from './actions'
 
 import PageStepper from './PageStepper'
 import Users from './Users'
-import Participants from './Participants'
 import EditQuestion from './EditQuestion'
-
 import Chart from './Chart'
 
 const mapStateToProps = ({}) => ({
@@ -28,9 +28,14 @@ class App extends Component {
     return (
       <div>
         <PageStepper />
-        <Participants />
-        <Users />
-        <Chart />
+        <Divider
+          style={{
+            marginTop: '5%',
+            marginBottom: '5%',
+          }}
+        />
+        <Users /><br />
+        <Chart /><br />
         <EditQuestion />
       </div>
     )

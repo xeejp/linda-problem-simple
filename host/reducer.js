@@ -17,7 +17,9 @@ const initialState = {
   ans_a: 0,
   ans_b: 0,
   ans_each: 0,
+  answered: 0,
   joined: 0,
+  red_description: 0,
 }
 
 function reducer(state = initialState, action) {
@@ -27,6 +29,7 @@ function reducer(state = initialState, action) {
       console.log("ADD_USER")
       return Object.assign({}, state, {
         users: action.users,
+        joined: action.joined,
       })
 
     case "CHANGE_PAGE":
@@ -38,6 +41,8 @@ function reducer(state = initialState, action) {
         ans_b: action.ans_b,
         ans_each: action.ans_each,
         joined: action.joined,
+        answered: action.answered,
+        red_description: action.red_description,
       })
 
     case "FETCH_CONTENTS":
@@ -49,13 +54,15 @@ function reducer(state = initialState, action) {
         ans_a: action.ans_a,
         ans_b: action.ans_b,
         ans_each: action.ans_each,
+        answered: action.answered,
+        red_description: action.red_description,
         joined: action.joined,
       })
 
     case "FINISH_DESCRIPTION":
       return Object.assign({}, state, {
         users: action.users,
-        finish_description: action.finish_description,
+        red_description: action.red_description,
       })
 
     case "SUBMIT_ANSWER":
@@ -65,7 +72,9 @@ function reducer(state = initialState, action) {
         ans_a: action.ans_a,
         ans_b: action.ans_b,
         ans_each: action.ans_each,
+        answered: action.answered,
         joined: action.joined,
+        red_description: action.red_description,
       })
 
     case "UPDATE_TEXT":

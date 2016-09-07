@@ -4,11 +4,25 @@ import reactCSS from 'reactcss'
 
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
-const mapStateToProps = ({page, users, text}) => ({
+const mapStateToProps = ({page, users, text, joined, answered, red_description}) => ({
   page,
   users,
   text,
+  joined, 
+  answered, 
+  red_description,
 })
+
+function createHeaderInfoStr(page, joined, answered, red_description) {
+  switch (page) {
+    case "description":
+      return "("+red_description+"人が説明を読み終えました)"
+    case "experiment":
+      return "("+answered+"人が回答を済ませました)"
+    default:
+      return ""
+  }
+}
 
 function createUserStatuStr(user, page, text) {
   const style = reactCSS({
@@ -27,13 +41,13 @@ function createUserStatuStr(user, page, text) {
       return (
         <span>
           {
-            user.is_finish_description
+            user.is_red_description
             ? <span style={ style.selected }>既読</span>
             : <span style={ style.nonselect }>既読</span>
           }
           <span>・</span>
           {
-            !user.is_finish_description
+            !user.is_red_description
             ? <span style={ style.selected }>未読</span>
             : <span style={ style.nonselect }>未読</span>
           }
@@ -43,19 +57,19 @@ function createUserStatuStr(user, page, text) {
       return (
         <span>
           {
-            status == "programmer"
+            user.status == "a"
             ? <span style={ style.selected }>{text.answers[0]}</span>
             : <span style={ style.nonselect }>{text.answers[0]}</span>
           }
           <span>・</span>
           {
-            status == "banker"
+            user.status == "b"
             ? <span style={ style.selected }>{text.answers[1]}</span>
             : <span style={ style.nonselect }>{text.answers[1]}</span>
           }
           <span>・</span>
           {
-            status == "each"
+            user.status == "each"
             ? <span style={ style.selected }>{text.answers[2]}</span>
             : <span style={ style.nonselect }>{text.answers[2]}</span>
           }
@@ -75,14 +89,12 @@ const User = ({ id, user, page, text }) => (
 
 class Users extends Component {
   render() {
-    const {users, page, text} = this.props
+    const {users, page, text, joined, answered, red_description} = this.props
 
     return (
-      <Card 
-        style={{marginBottom: "5%"}}
-      >
+      <Card>
         <CardHeader
-          title={"登録者 " + Object.keys(users).length + "人"}
+          title={"登録者 "+joined + "人 "+createHeaderInfoStr(page, joined, answered, red_description)}
           actAsExpander={true}
           showExpandableButton={true}
         />

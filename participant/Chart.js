@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import Highcharts from 'react-highcharts'
+import { Card, CardHeader, CardText } from 'material-ui/Card'
 
 const mapStateToProps = ({ans_a, ans_b, ans_each}) => ({
   ans_a,
@@ -10,51 +11,79 @@ const mapStateToProps = ({ans_a, ans_b, ans_each}) => ({
 })
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      expanded: true,
+    }
+  }
+
+  handleExpandChange(expanded) {
+    this.setState({
+      expanded: expanded,
+    })
+  }
+
   render() {
     const { ans_a, ans_b, ans_each } = this.props
 
     return (
-      <Highcharts 
-        config={{
-          chart: {
-            type: 'column',
-            inverted: false
-          },
-          title: {
-            text: '実験結果'
-          },
-          xAxis: {
-            type: 'category',
-          },
-          yAxis: {
-            min: 0,
-            allowDecimals: false,
+      <Card
+        expanded={this.state.expanded}
+        onExpandChange={this.handleExpandChange.bind(this)}
+      >
+        <CardHeader
+          title="実験結果"
+          actAsExpander={true}
+          showExpandableButton={true}
+        />
+        <CardText expandable={true}>
+        <Highcharts 
+          config={{
+            chart: {
+              type: 'column',
+              inverted: false
+            },
             title: {
-              text: '人数'
-            }
-          },
-          legend: {
-            enabled: false
-          },
-          tooltip: {
-            enabled: false
-          },
-          series: [{
-            name: '人数',
-            data: [
-              ['プログラマ', ans_a],
-              ['銀行員', ans_b],
-              ['プログラマで環境保護活動家', ans_each]
-            ],
-            dataLabels: {
-              enabled: true,
-              color: '#000',
-              align: 'center',
-              format: '{point.y}',
-            }
-          }]
-        }} 
-      />
+              text: '実験結果'
+            },
+            xAxis: {
+              type: 'category',
+            },
+            yAxis: {
+              min: 0,
+              allowDecimals: false,
+              title: {
+                text: '人数'
+              }
+            },
+            credits: {
+              enabled: false
+            },
+            legend: {
+              enabled: false
+            },
+            tooltip: {
+              enabled: false
+            },
+            series: [{
+              name: '人数',
+              data: [
+                ['プログラマ', ans_a],
+                ['銀行員', ans_b],
+                ['プログラマで環境保護活動家', ans_each]
+              ],
+              dataLabels: {
+                enabled: true,
+                color: '#000',
+                align: 'center',
+                format: '{point.y}',
+              }
+            }]
+          }} 
+        />
+      </CardText>
+    </Card>
     )
   }
 }
