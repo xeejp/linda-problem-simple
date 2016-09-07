@@ -9,6 +9,7 @@ function reducer(state = {}, action) {
         ans_a: action.ans_a,
         ans_b: action.ans_b,
         ans_each: action.ans_each,
+        answered: action.answered,
         joined: action.joined,
       })
 
@@ -24,6 +25,7 @@ function reducer(state = {}, action) {
         ans_a: action.ans_a,
         ans_b: action.ans_b,
         ans_each: action.ans_each,
+        answered: action.answered,
         joined: action.joined,
       })
 
@@ -33,6 +35,7 @@ function reducer(state = {}, action) {
         ans_a: action.ans_a,
         ans_b: action.ans_b,
         ans_each: action.ans_each,
+        answered: action.answered,
         joined: action.joined,
       })
       

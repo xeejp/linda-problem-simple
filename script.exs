@@ -16,11 +16,11 @@ defmodule LindaProblemSimple do
        red_description: 0,
        text: %{
          descriptions: [
-           %{ id: 0, text: "説明1", },
-           %{ id: 1, text: "説明2", },
-           %{ id: 2, text: "説明3", },
+           %{ id: 0, text: "次の状況を考えてください。", },
+           %{ id: 1, text: "リンダは大学でプログラミングを学び主席で卒業しました。\n彼女は菜食主義者で、環境問題にも造詣が深い女性です。\n彼女は今社会人として活躍しています。\nリンダは現在何をしているか、次のうちいずれの可能性が高いでしょうか。", },
+           %{ id: 2, text: "選択肢から1つ選んでください。", },
          ],
-         question: "リンダは31歳です。独身です。\n社交的でとても陽気な性格です。彼女は哲学を専攻しました。\n学生時代には、差別や社会的正義について深い関心をもち、反原発運動にも参加していました。\n次の各項目の順序を、最もあり得るものを1番目に、最もあり得ないものを8番目に来るように並び替えてください。",
+         question: "リンダは大学でプログラミングを学び主席で卒業しました。\n彼女は菜食主義者で、環境問題にも造詣が深い女性です。\n彼女は今社会人として活躍しています。\nリンダは現在何をしているか、次のうちいずれの可能性が高いでしょうか。\n可能性が高いものを選んでください。\n",
          answers: [
            "プログラマ",
            "銀行員",
@@ -109,16 +109,31 @@ defmodule LindaProblemSimple do
       joined: data.joined,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
-      {id, %{action: %{
-         type: "CHANGE_PAGE",
-         page: data.page,
-         text: data.text,
-         status: data.participants[id].status,
-         ans_a: data.ans_a,
-         ans_b: data.ans_b,
-         ans_each: data.ans_each,
-         joined: data.joined,
-       }}} end) |> Enum.into(%{})
+      {id, %{action: if data.page == "result" do
+          %{
+            type: "FETCH_CONTENTS",
+            page: data.page,
+            text: data.text,
+            status: data.participants[id].status,
+            ans_a: data.ans_a,
+            ans_b: data.ans_b,
+            ans_each: data.ans_each,
+            answered: data.answered,
+            joined: data.joined,
+          }
+      else
+        %{
+          type: "FETCH_CONTENTS",
+          page: data.page,
+          text: data.text,
+          status: data.participants[id].status,
+          ans_a: 0,
+          ans_b: 0,
+          ans_each: 0,
+          answered: data.answered,
+          joined: data.joined,
+        }
+      end}} end) |> Enum.into(%{})
      {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
   end
 
@@ -132,16 +147,31 @@ defmodule LindaProblemSimple do
   end
 
   def handle_received(data, %{"action" => "fetch contents"}, id) do
-    action = %{
-      type: "FETCH_CONTENTS",
-      page: data.page,
-      text: data.text,
-      status: data.participants[id].status,
-      ans_a: data.ans_a,
-      ans_b: data.ans_b,
-      ans_each: data.ans_each,
-      joined: data.joined,
-    }
+    action = if data.page == "result" do
+      %{
+        type: "FETCH_CONTENTS",
+        page: data.page,
+        text: data.text,
+        status: data.participants[id].status,
+        ans_a: data.ans_a,
+        ans_b: data.ans_b,
+        ans_each: data.ans_each,
+        answered: data.answered,
+        joined: data.joined,
+      }
+    else
+      %{
+        type: "FETCH_CONTENTS",
+        page: data.page,
+        text: data.text,
+        status: data.participants[id].status,
+        ans_a: 0,
+        ans_b: 0,
+        ans_each: 0,
+        answered: data.answered,
+        joined: data.joined,
+      }
+    end
     {:ok, %{"data" => data, "participant" => %{id => %{action: action}}}}
   end
 
@@ -164,15 +194,27 @@ defmodule LindaProblemSimple do
       joined: data.joined,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
-      {id, %{action: %{
-         type: "SUBMIT_ANSWER",
-         status: data.participants[id].status,
-         ans_a: data.ans_a,
-         ans_b: data.ans_b,
-         ans_each: data.ans_each,
-         answered: data.answered,
-         joined: data.joined,
-       }}} end)
+      {id, %{action: if data.page == "result" do
+          %{
+            type: "SUBMIT_ANSWER",
+            status: data.participants[id].status,
+            ans_a: data.ans_a,
+            ans_b: data.ans_b,
+            ans_each: data.ans_each,
+            answered: data.answered,
+            joined: data.joined,
+          }
+      else 
+      %{
+        type: "SUBMIT_ANSWER",
+        status: data.participants[id].status,
+        ans_a: 0,
+        ans_b: 0,
+        ans_each: 0,
+        answered: data.answered,
+        joined: data.joined,
+      }
+      end}} end)
  {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
   end
 

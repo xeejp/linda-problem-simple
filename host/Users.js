@@ -53,7 +53,7 @@ function createUserStatuStr(user, page, text) {
           }
         </span>
       )
-    case "experiment":
+    case "experiment": case "result":
       return (
         <span>
           {
@@ -76,7 +76,7 @@ function createUserStatuStr(user, page, text) {
         </span>
       )
     default:
-      return null
+      return <span>-</span>
   }
 }
 

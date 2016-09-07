@@ -6,12 +6,10 @@ import LinearProgress from 'material-ui/LinearProgress';
 
 import { submitAnswer } from './actions'
 
-const mapStateToProps = ({status, ans_a, ans_b, ans_each, joined, text}) => ({
+const mapStateToProps = ({status, answered, joined, text}) => ({
   status,
-  ans_a,
-  ans_b,
-  ans_each,
   joined,
+  answered,
   text,
 })
 
@@ -34,7 +32,7 @@ class QuestionAnswers extends Component {
   }
 
   render() {
-    const { status, ans_a, ans_b, ans_each, joined, text } = this.props
+    const { status, answered, joined, text } = this.props
     return (
       <div>
         <RadioButtonGroup 
@@ -45,15 +43,15 @@ class QuestionAnswers extends Component {
           <RadioButton value="a" label={text.answers[0]} disabled={status!=null} />
           <RadioButton value="b" label={text.answers[1]} disabled={status!=null} />
           <RadioButton value="each" label={text.answers[2]} disabled={status!=null} />
-        </RadioButtonGroup>
+        </RadioButtonGroup><br />
 
         {
           status != null
           ? <div>
             <RaisedButton label="送信" primary={true} disabled={true} onClick={this.handleClick.bind(this)} />
-            <p>残り{joined - ans_a - ans_b - ans_each}名です。</p>
+            <p>残り{joined - answered}名です。</p>
             <p>しばらくお待ちください</p>
-            <LinearProgress mode="determinate" max={joined} value={ans_a+ans_b+ans_each} />
+            <LinearProgress mode="determinate" max={joined} value={answered} />
           </div>
           : this.state.value != null || status != null
             ? <div>

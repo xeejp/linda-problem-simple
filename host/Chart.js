@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import Highcharts from 'react-highcharts'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
-const mapStateToProps = ({ans_a, ans_b, ans_each}) => ({
+const mapStateToProps = ({text, ans_a, ans_b, ans_each}) => ({
+  text,
   ans_a,
   ans_b,
   ans_each,
@@ -25,7 +26,7 @@ class App extends Component {
   }
 
   render() {
-    const { ans_a, ans_b, ans_each } = this.props
+    const { text, ans_a, ans_b, ans_each } = this.props
 
     return (
       <Card
@@ -69,9 +70,9 @@ class App extends Component {
             series: [{
               name: '人数',
               data: [
-                ['プログラマ', ans_a],
-                ['銀行員', ans_b],
-                ['プログラマで環境保護活動家', ans_each]
+                [text.answers[0], ans_a],
+                [text.answers[1], ans_b],
+                [text.answers[2], ans_each]
               ],
               dataLabels: {
                 enabled: true,
