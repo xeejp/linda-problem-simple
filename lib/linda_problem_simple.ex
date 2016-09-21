@@ -1,5 +1,5 @@
 defmodule LindaProblemSimple do
-  use Xee.ThemeScript
+  use XeeThemeScript
   require Logger
 
   # Callbacks
