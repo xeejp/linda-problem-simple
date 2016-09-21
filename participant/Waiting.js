@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import { Card, CardText, CardTitle } from 'material-ui/Card'
 import CircularProgress from 'material-ui/CircularProgress'
 
 const mapStateToProps = ({joined}) => ({
@@ -19,13 +20,17 @@ class Waiting extends Component {
   render() {
     const { joined } = this.props
     return (
-      <div>
-        <p>参加者の登録を待っています。(現在の参加者:{joined}人)</p>
-        <p>この画面のまましばらくお待ちください。</p>
-        <div style={{textAlign: "center"}}>
-          <CircularProgress />
+      <Card>
+        <CardTitle title="リンダ問題(簡易版)" subtitle="待機画面" />
+          <CardText>
+            <p>参加者の登録を待っています。</p>
+            <p>この画面のまましばらくお待ち下さい。</p>
+            <p>現在{joined}人が参加しています。 </p>
+          </CardText>
+          <div style={{textAlign: "center"}}>
+          <CircularProgress size={2}/>
         </div>
-      </div>
+      </Card>
     )
   }
 }

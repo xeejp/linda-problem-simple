@@ -3,12 +3,11 @@ import { connect } from 'react-redux'
 
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views'
-import IconButton from 'material-ui/IconButton'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ImageEdit from 'material-ui/svg-icons/image/edit'
 import ImageAdd from 'material-ui/svg-icons/content/add';
 import ImageDelete from 'material-ui/svg-icons/action/delete';
 import FlatButton from 'material-ui/RaisedButton'
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 import Snackbar from 'material-ui/Snackbar'
@@ -232,9 +231,9 @@ class EditQuestion extends Component {
       />,
     ]
     return (<div>
-      <IconButton onClick={this.handleOpen.bind(this)} disabled={page != "waiting"}>
+      <FloatingActionButton onClick={this.handleOpen.bind(this)} disabled={page != "waiting"}>
          <ImageEdit />
-      </IconButton>
+      </FloatingActionButton>
       <Dialog
         title="問題編集画面"
         actions={actions}
