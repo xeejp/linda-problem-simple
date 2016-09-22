@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import QuestionText from './QuestionText'
 import QuestionAnswers from './QuestionAnswers'
 
+import { Card, CardText } from 'material-ui/Card'
+
 const mapStateToProps = ({}) => ({
 })
 
@@ -17,10 +19,10 @@ class Question extends Component {
   }
 
   render() {
-    return <div>
+    return <Card><CardText><div>
       <QuestionText />
       <QuestionAnswers />
-    </div>
+    </div></CardText></Card>
   }
 }
 
