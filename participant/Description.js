@@ -47,6 +47,18 @@ class Description extends Component {
       const { dispatch } = this.props
       dispatch(finishDescription())
     }
+    let desc = [<div key={-1}>
+              <CardHeader
+                title="リンダ問題(簡易版)"
+                subtitle={"ルールの説明 " + (text.descriptions.length+1)+"/"+(text.descriptions.length+1)}
+              />
+              <CardText expandable={false}>
+                <p>実験が開始されるまでしばらくお待ちください</p>
+                <div style={{textAlign: "center"}}>
+                  <CircularProgress />
+                </div>
+              </CardText>
+            </div>]
     return (
       <div>
         <Card style={{marginBottom: "5%"}}>
@@ -65,20 +77,8 @@ class Description extends Component {
                     {description.text.split('\n').map( line => <p key={line}>{line}</p>)}
                   </CardText>
                 </div>
-              ))
+              )).concat(desc)
             }
-            <div>
-              <CardHeader
-                title="リンダ問題(簡易版)"
-                subtitle={"ルールの説明 " + (text.descriptions.length+1)+"/"+(text.descriptions.length+1)}
-              />
-              <CardText expandable={false}>
-                <p>実験が開始されるまでしばらくお待ちください</p>
-                <div style={{textAlign: "center"}}>
-                  <CircularProgress />
-                </div>
-              </CardText>
-            </div>
           </SwipeableViews>
         </Card>
         <RaisedButton 
