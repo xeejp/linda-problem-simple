@@ -2,7 +2,7 @@ defmodule LindaProblemSimple.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :linda_problem_simple,
+    [app: :xee_linda_problem_simple,
      version: "0.1.0",
      build_path: "../../_build",
      config_path: "../../config/config.exs",
