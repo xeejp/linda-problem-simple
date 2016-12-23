@@ -7,6 +7,7 @@ import { fetchContents } from './actions'
 
 import PageStepper from './PageStepper'
 import Users from './Users'
+import Config from './Config'
 import EditQuestion from './EditQuestion'
 import DownloadButton from './DownloadButton'
 import Chart from './Chart'
@@ -39,7 +40,8 @@ class App extends Component {
         />
         <Users /><br />
         <Chart /><br />
-        <EditQuestion />
+        <Config />
+        <EditQuestion style={{marginLeft: '2%'}} />
         <DownloadButton
           fileName={"linda_problem_simple.csv"}
           list={[

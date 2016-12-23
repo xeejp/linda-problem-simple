@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import reactCSS from 'reactcss'
 import throttle from 'react-throttle-render'
 
+import { bindActionCreators } from 'redux'
+import { openParticipantPage } from './actions'
+
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
 const mapStateToProps = ({page, users, text, joined, answered, red_description}) => ({
@@ -81,16 +84,23 @@ function createUserStatuStr(user, page, text) {
   }
 }
 
-const User = ({ id, user, page, text }) => (
+const User = ({ id, user, page, text, openParticipantPage }) => (
   <tr>
-    <td>{id}</td>
+    <td><a onClick={openParticipantPage(id)}>{id}</a></td>
     <td>{createUserStatuStr(user, page, text)}</td>
   </tr>
 )
 
+const mapDispatchToProps = (dispatch) => {
+  const open = bindActionCreators(openParticipantPage, dispatch)
+  return {
+    openParticipantPage: (id) => () => open(id)
+  }
+}
+
 class Users extends Component {
   render() {
-    const {users, page, text, joined, answered, red_description} = this.props
+    const {users, page, text, joined, answered, red_description, openParticipantPage} = this.props
 
     return (
       <Card>
@@ -117,6 +127,7 @@ class Users extends Component {
                       user={users[id]}
                       page={page}
                       text={text}
+                      openParticipantPage={openParticipantPage}
                     />
                     : null
                 )).reverse()
@@ -129,4 +140,4 @@ class Users extends Component {
   }
 }
 
-export default connect(mapStateToProps)(throttle(Users, 200))
+export default connect(mapStateToProps, mapDispatchToProps)(throttle(Users, 200))

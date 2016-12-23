@@ -212,7 +212,7 @@ class EditQuestion extends Component {
   }
 
   render(){
-    const { page, text } = this.props
+    const { page, text, style } = this.props
 
     const actions = [
       <FlatButton
@@ -231,7 +231,7 @@ class EditQuestion extends Component {
       />,
     ]
     return (<span>
-      <FloatingActionButton onClick={this.handleOpen.bind(this)} disabled={page != "waiting"}>
+      <FloatingActionButton onClick={this.handleOpen.bind(this)} style={style} disabled={page != "waiting"}>
          <ImageEdit />
       </FloatingActionButton>
       <Dialog
