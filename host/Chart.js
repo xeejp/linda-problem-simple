@@ -28,7 +28,7 @@ class App extends Component {
 
   render() {
     const { text, ans_a, ans_b, ans_each } = this.props
-
+    if(!text) return null
     return (
       <Card
         expanded={this.state.expanded}

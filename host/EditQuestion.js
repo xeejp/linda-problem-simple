@@ -14,6 +14,8 @@ import Snackbar from 'material-ui/Snackbar'
 
 import { fetchContents, updateText } from './actions'
 
+import { ReadJSON } from '../util/ReadJSON'
+
 const mapStateToProps = ({ text, page }) => ({
   text, page
 })
@@ -22,25 +24,20 @@ class EditQuestion extends Component {
   constructor(props){
     super(props)
     const { text } = this.props
+    var default_text = text
+    if(!text) {
+      default_text = ReadJSON().dynamic_text
+      const { dispatch } = this.props
+      dispatch(updateText(default_text))
+    }
+    console.log(default_text)
     this.state = {
-      text: text,
+      text: default_text,
       isOpenDialog: false,
       isOpenSnackbar: false,
       snackbarMessage: "",
       slideIndex: 0,
-      default_text: {
-        descriptions: [
-          { id: 0, text: "次の状況を考えてください。", },
-          { id: 1, text: "リンダは大学でプログラミングを学び主席で卒業しました。\n彼女は菜食主義者で、環境問題にも造詣が深い女性です。\n彼女は今社会人として活躍しています。\nリンダは現在何をしているか、次のうちいずれの可能性が高いでしょうか。", },
-          { id: 2, text: "選択肢から1つ選んでください。", },
-        ],
-        question: "リンダは大学でプログラミングを学び主席で卒業しました。\n彼女は菜食主義者で、環境問題にも造詣が深い女性です。\n彼女は今社会人として活躍しています。\nリンダは現在何をしているか、次のうちいずれの可能性が高いでしょうか。\n可能性が高いものを選んでください。\n",
-        answers: [
-          "プログラマ",
-          "銀行員",
-          "プログラマで自然保護活動家",
-        ],
-      }
+      default_text: ReadJSON().dynamic_text,
     }
   }
 
