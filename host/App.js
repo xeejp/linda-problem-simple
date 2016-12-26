@@ -12,6 +12,8 @@ import EditQuestion from './EditQuestion'
 import DownloadButton from './DownloadButton'
 import Chart from './Chart'
 
+import { ReadJSON, LineBreak } from '../util/ReadJSON'
+
 const mapStateToProps = ({ users, text, page }) => ({
   users, text, page
 })
@@ -29,6 +31,7 @@ class App extends Component {
 
   render() {
     const { users, text, page } = this.props
+    const multi_text = ReadJSON().static_text
     return (
       <div>
         <PageStepper />
@@ -45,12 +48,12 @@ class App extends Component {
         <DownloadButton
           fileName={"linda_problem_simple.csv"}
           list={[
-            ["リンダ問題(簡易版)"],
-            ["実験日", new Date()],
-            ["登録者数", Object.keys(users).length],
-            ["ID", "回答"],
+            [multi_text["download_text"][0]]
+            [multi_text["download_text"][1], new Date()],
+            [multi_text["download_text"][2], Object.keys(users).length],
+            ["ID", multi_text["download_text"][3]],
           ].concat(
-            Object.keys(users).map(id => [id, (users[id].status == 'a')? text.answeres[0] : (users[id].status == 'b')? text.answeres[1] : (users[id].status == 'each')? text.answers[2] : "未回答"])
+            Object.keys(users).map(id => [id, (users[id].status == 'a')? text.answeres[0] : (users[id].status == 'b')? text.answeres[1] : (users[id].status == 'each')? text.answers[2] : multi_text["download_text"][4]])
           )}
           style={{marginLeft: '2%'}}
           disabled={page != "result"}

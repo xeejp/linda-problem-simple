@@ -1,30 +1,34 @@
+import { ReadJSON, LineBreak } from '../util/ReadJSON'
+
 export function getPage(page) {
+  const multi_text = ReadJSON().static_text
   switch(page) {
     case 'waiting':
-      return '待機'
+      return multi_text["page_text"]["waiting"]
     case 'description':
-      return '説明'
+      return multi_text["page_text"]["description"]
     case 'experiment':
-      return '実験'
+      return multi_text["page_text"]["experiment"]
     case 'result':
-      return '結果'
+      return multi_text["page_text"]["result"]
     default:
       return page
   }
 }
 
 export function getStatus(status) {
+  const multi_text = ReadJSON().static_text
   switch(status) {
     case 'programmer':
-      return 'プログラマ'
+      return multi_text["status_text"]["programmer"]
     case 'banker':
-      return '銀行員'
+      return multi_text["status_text"]["banker"]
     case 'each':
-      return 'プログラマで環境保護活動家'
+      return multi_text["status_text"]["each"]
     case 'noactive':
-      return '未参加'
+      return multi_text["status_text"]["noactive"]
     case null:
-      return '未選択'
+      return multi_text["status_text"]["null"]
     default:
       return status
   } 

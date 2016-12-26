@@ -8,6 +8,8 @@ import { openParticipantPage } from './actions'
 
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
+import { ReadJSON, LineBreak } from '../util/ReadJSON'
+
 const mapStateToProps = ({page, users, text, joined, answered, red_description}) => ({
   page,
   users,
@@ -17,12 +19,14 @@ const mapStateToProps = ({page, users, text, joined, answered, red_description})
   red_description,
 })
 
+const multi_text = ReadJSON().static_text
+
 function createHeaderInfoStr(page, joined, answered, red_description) {
   switch (page) {
     case "description":
-      return "("+red_description+"人が説明を読み終えました)"
+      return "("+red_description+multi_text["users_text"][0]
     case "experiment":
-      return "("+answered+"人が回答を済ませました)"
+      return "("+answered+multi_text["users_text"][1]
     default:
       return ""
   }
@@ -46,14 +50,14 @@ function createUserStatuStr(user, page, text) {
         <span>
           {
             user.is_red_description
-            ? <span style={ style.selected }>既読</span>
-            : <span style={ style.nonselect }>既読</span>
+            ? <span style={ style.selected }>{multi_text["users_text"][2]}</span>
+            : <span style={ style.nonselect }>{multi_text["users_text"][2]}</span>
           }
-          <span>・</span>
+          <span>{multi_text["users_text"][3]}</span>
           {
             !user.is_red_description
-            ? <span style={ style.selected }>未読</span>
-            : <span style={ style.nonselect }>未読</span>
+            ? <span style={ style.selected }>{multi_text["users_text"][4]}</span>
+            : <span style={ style.nonselect }>{multi_text["users_text"][4]}</span>
           }
         </span>
       )
@@ -65,13 +69,13 @@ function createUserStatuStr(user, page, text) {
             ? <span style={ style.selected }>{text.answers[0]}</span>
             : <span style={ style.nonselect }>{text.answers[0]}</span>
           }
-          <span>・</span>
+          <span>{multi_text["users_text"][3]}</span>
           {
             user.status == "b"
             ? <span style={ style.selected }>{text.answers[1]}</span>
             : <span style={ style.nonselect }>{text.answers[1]}</span>
           }
-          <span>・</span>
+          <span>{multi_text["users_text"][3]}</span>
           {
             user.status == "each"
             ? <span style={ style.selected }>{text.answers[2]}</span>
@@ -105,7 +109,7 @@ class Users extends Component {
     return (
       <Card>
         <CardHeader
-          title={"登録者 "+joined + "人 "+createHeaderInfoStr(page, joined, answered, red_description)}
+          title={multi_text["users_text"][5]+joined +multi_text["users_text"][6]+createHeaderInfoStr(page, joined, answered, red_description)}
           actAsExpander={true}
           showExpandableButton={true}
         />
@@ -114,7 +118,7 @@ class Users extends Component {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>状態</th>
+                <th>{multi_text["users_text"][7]}</th>
               </tr>
             </thead>
             <tbody>

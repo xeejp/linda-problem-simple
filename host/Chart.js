@@ -5,6 +5,8 @@ import throttle from 'react-throttle-render'
 import Highcharts from 'react-highcharts'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
+import { ReadJSON, LineBreak } from '../util/ReadJSON'
+
 const mapStateToProps = ({text, ans_a, ans_b, ans_each}) => ({
   text,
   ans_a,
@@ -28,6 +30,7 @@ class App extends Component {
 
   render() {
     const { text, ans_a, ans_b, ans_each } = this.props
+    const multi_text = ReadJSON().static_text
     if(!text) return null
     return (
       <Card
@@ -35,7 +38,7 @@ class App extends Component {
         onExpandChange={this.handleExpandChange.bind(this)}
       >
         <CardHeader
-          title="実験結果"
+          title={multi_text["chart_text"][0]}
           actAsExpander={true}
           showExpandableButton={true}
         />
@@ -47,7 +50,7 @@ class App extends Component {
               inverted: false
             },
             title: {
-              text: '実験結果'
+              text: multi_text["chart_text"][0]
             },
             xAxis: {
               type: 'category',
@@ -56,7 +59,7 @@ class App extends Component {
               min: 0,
               allowDecimals: false,
               title: {
-                text: '人数'
+                text: multi_text["chart_text"][1]
               }
             },
             credits: {
@@ -69,7 +72,7 @@ class App extends Component {
               enabled: false
             },
             series: [{
-              name: '人数',
+              name: multi_text["chart_text"][1],
               data: [
                 [text.answers[0], ans_a],
                 [text.answers[1], ans_b],

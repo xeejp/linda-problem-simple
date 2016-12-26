@@ -4,6 +4,10 @@ import { connect } from 'react-redux'
 import { Card, CardText, CardTitle } from 'material-ui/Card'
 import CircularProgress from 'material-ui/CircularProgress'
 
+import { ReadJSON, LineBreak } from '../util/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+
 const mapStateToProps = ({joined}) => ({
   joined
 })
@@ -21,11 +25,11 @@ class Waiting extends Component {
     const { joined } = this.props
     return (
       <Card>
-        <CardTitle title="リンダ問題(簡易版)" subtitle="待機画面" />
+        <CardTitle title={multi_text["waiting_text"]["title"]} subtitle={multi_text["waiting_text"]["subtitle"]} />
           <CardText>
-            <p>参加者の登録を待っています。</p>
-            <p>この画面のまましばらくお待ち下さい。</p>
-            <p>現在{joined}人が参加しています。 </p>
+            <p>{multi_text["waiting_text"]["text"][0]}</p>
+            <p>{multi_text["waiting_text"]["text"][1]}</p>
+            <p>{multi_text["waiting_text"]["text"][2]}{joined}{multi_text["waiting_text"]["text"][3]}</p>
           </CardText>
           <div style={{textAlign: "center"}}>
           <CircularProgress size={2}/>

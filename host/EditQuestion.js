@@ -20,6 +20,8 @@ const mapStateToProps = ({ text, page }) => ({
   text, page
 })
 
+const multi_text = ReadJSON().static_text
+
 class EditQuestion extends Component {
   constructor(props){
     super(props)
@@ -61,7 +63,7 @@ class EditQuestion extends Component {
                   </td>
                   <td>
                     <TextField
-                      hintText={"問題の説明"}
+                      hintText={multi_text["edit_question_text"][0]}
                       defaultValue={description.text}
                       onBlur={this.handleChange.bind(this, ["descriptions", index, "text"])}
                       multiLine={true}
@@ -90,31 +92,31 @@ class EditQuestion extends Component {
   ExperimentTab() {
     return (
       <div>
-        <p>問題文</p>
+        <p>{multi_text["edit_question_text"][1]}</p>
         <TextField
-          hintText={"問題の説明"}
+          hintText={multi_text["edit_question_text"][0]}
           defaultValue={this.state.text.question}
           onBlur={this.handleChange.bind(this, ["question"])}
           multiLine={true}
           fullWidth={true}
         />
-        <p>選択肢</p>
+        <p>{multi_text["edit_question_text"][2]}</p>
         <TextField
-          hintText={"選択肢"}
+          hintText={multi_text["edit_question_text"][2]}
           defaultValue={this.state.text.answers[0]}
           onBlur={this.handleChange.bind(this, ["answers", 0])}
           multiLine={false}
           fullWidth={true}
         />
         <TextField
-          hintText={"選択肢"}
+          hintText={multi_text["edit_question_text"][2]}
           defaultValue={this.state.text.answers[1]}
           onBlur={this.handleChange.bind(this, ["answers", 1])}
           multiLine={false}
           fullWidth={true}
         />
         <TextField
-          hintText={"選択肢"}
+          hintText={multi_text["edit_question_text"][2]}
           defaultValue={this.state.text.answers[2]}
           onBlur={this.handleChange.bind(this, ["answers", 2])}
           multiLine={false}
@@ -192,7 +194,7 @@ class EditQuestion extends Component {
     this.setState({ 
       isOpenDialog: false,
       isOpenSnackbar: true,
-      snackbarMessage: "テキストを更新しました",
+      snackbarMessage: multi_text["edit_question_text"][3],
     })
     const { dispatch } = this.props
     dispatch(updateText(this.state.text))
@@ -202,7 +204,7 @@ class EditQuestion extends Component {
     this.setState({ 
       isOpenDialog: false,
       isOpenSnackbar: true,
-      snackbarMessage: "テキストを初期化しました",
+      snackbarMessage: multi_text["edit_question_text"][4],
     })
     const { dispatch } = this.props
     dispatch(updateText(this.state.default_text))
@@ -213,17 +215,17 @@ class EditQuestion extends Component {
 
     const actions = [
       <FlatButton
-        label="適用"
+        label={multi_text["edit_question_text"][5]}
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.submit.bind(this)}
       />,
       <FlatButton
-        label="キャンセル"
+        label={multi_text["edit_question_text"][6]}
         onTouchTap={this.handleClose.bind(this)}
       />,
      <FlatButton
-        label="すべてリセット"
+        label={multi_text["edit_question_text"][7]}
         onTouchTap={this.reset.bind(this)}
       />,
     ]
@@ -232,7 +234,7 @@ class EditQuestion extends Component {
          <ImageEdit />
       </FloatingActionButton>
       <Dialog
-        title="問題編集画面"
+        title={multi_text["edit_question_text"][8]}
         actions={actions}
         modal={false}
         open={this.state.isOpenDialog}
@@ -242,8 +244,8 @@ class EditQuestion extends Component {
           onChange={this.handleSlideIndex.bind(this)}
           value={this.state.slideIndex}
         >
-          <Tab label="説明" value={0} />
-          <Tab label="実験" value={1} />
+          <Tab label={multi_text["edit_question_text"][9]} value={0} />
+          <Tab label={multi_text["edit_question_text"][10]} value={1} />
         </Tabs>
         <SwipeableViews
           index={this.state.slideIndex}

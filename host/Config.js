@@ -6,8 +6,12 @@ import ActionSettings from 'material-ui/svg-icons/action/settings'
 
 import ReactTooltip from 'react-tooltip'
 
+import { ReadJSON, LineBreak } from '../util/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+
 const Config = () => (<span>
-   <span data-tip={"設定項目なし"}>
+   <span data-tip={multi_text["config_text"]}>
    <FloatingActionButton
      disabled={true}
    >

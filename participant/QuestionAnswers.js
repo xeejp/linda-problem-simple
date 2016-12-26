@@ -6,6 +6,10 @@ import LinearProgress from 'material-ui/LinearProgress';
 
 import { submitAnswer } from './actions'
 
+import { ReadJSON, LineBreak } from '../util/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+
 const mapStateToProps = ({status, answered, joined, text}) => ({
   status,
   joined,
@@ -48,14 +52,14 @@ class QuestionAnswers extends Component {
         {
           status != null
           ? <div>
-            <RaisedButton label="送信" primary={true} disabled={true} onClick={this.handleClick.bind(this)} />
-            <p>残り{joined - answered}名です。</p>
-            <p>しばらくお待ちください</p>
+            <RaisedButton label={multi_text["question_answer_text"]["send"]} primary={true} disabled={true} onClick={this.handleClick.bind(this)} />
+            <p>{multi_text["question_answer_text"]["number"][0]}{joined - answered}{multi_text["question_answer_text"]["number"][1]}</p>
+            <p>{multi_text["question_answer_text"]["number"][2]}</p>
             <LinearProgress mode="determinate" max={joined} value={answered} />
           </div>
           : this.state.value != null || status != null
             ? <div>
-              <RaisedButton label="送信" primary={true} onClick={this.handleClick.bind(this)} />
+              <RaisedButton label={multi_text["question_answer_text"]["send"]} primary={true} onClick={this.handleClick.bind(this)} />
               </div>
             : null
         }

@@ -7,6 +7,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { changePage } from './actions'
 import { getPage } from 'util/index'
 
+import { ReadJSON, LineBreak } from '../util/ReadJSON'
+
 const pages = ["waiting", "description", "experiment", "result"]
 
 const mapStateToProps = ({page, joined, answered}) => ({
@@ -68,6 +70,8 @@ class PageStepper extends Component {
 
   render() {
     const { page, joined, answered } = this.props
+    const multi_text = ReadJSON().static_text
+
     if (page == "experiment" && joined == answered) {
       this.finishExperiment()
     }
@@ -87,13 +91,13 @@ class PageStepper extends Component {
           {steps}
         </Stepper>
         <RaisedButton 
-          label="戻る"
+          label={multi_text["page_stepper_text"][0]}
           style={{marginLeft: '3%'}}
           disabled={pages.indexOf(page) == 0}
           onClick={this.backPage.bind(this)}
         />
         <RaisedButton
-          label="次へ" 
+          label={multi_text["page_stepper_text"][1]} 
           style={{marginLeft: '3%'}}
           primary={true} 
           disabled={pages.indexOf(page) == pages.length-1}

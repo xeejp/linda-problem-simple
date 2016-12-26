@@ -8,6 +8,8 @@ import Description from './Description'
 import Question from './Question'
 import Result from './Result'
 
+import { ReadJSON, LineBreak } from '../util/ReadJSON'
+
 const mapStateToProps = ({page, status}) => ({
   page,
   status,
@@ -26,6 +28,8 @@ class App extends Component {
 
   render() {
     const { page, status } = this.props
+    const multi_text = ReadJSON().static_text
+
     return (
       <div>
         { (status != "noactive" || page == "result")
@@ -36,8 +40,7 @@ class App extends Component {
               { (page == "result") ? <Result /> : null }
             </div>
           : <div>
-              <p>実験はすでに開始されています。</p>
-              <p>実験が終了するまでお待ちください。</p>
+              <p>{LineBreak(multi_text["end"])}</p>
             </div>
           
         }
