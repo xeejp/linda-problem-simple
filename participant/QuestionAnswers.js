@@ -37,6 +37,7 @@ class QuestionAnswers extends Component {
 
   render() {
     const { status, answered, joined, text } = this.props
+
     return (
       <div>
         <RadioButtonGroup 
@@ -52,14 +53,14 @@ class QuestionAnswers extends Component {
         {
           status != null
           ? <div>
-            <RaisedButton label={multi_text["question_answer_text"]["send"]} primary={true} disabled={true} onClick={this.handleClick.bind(this)} />
-            <p>{multi_text["question_answer_text"]["number"][0]}{joined - answered}{multi_text["question_answer_text"]["number"][1]}</p>
-            <p>{multi_text["question_answer_text"]["number"][2]}</p>
+            <RaisedButton label={multi_text["question_answers_text"]["send"]} primary={true} disabled={true} onClick={this.handleClick.bind(this)} />
+            <p>{multi_text["question_answers_text"]["number"][0]}{joined - answered}{multi_text["question_answers_text"]["number"][1]}</p>
+            <p>{multi_text["question_answers_text"]["number"][2]}</p>
             <LinearProgress mode="determinate" max={joined} value={answered} />
           </div>
           : this.state.value != null || status != null
             ? <div>
-              <RaisedButton label={multi_text["question_answer_text"]["send"]} primary={true} onClick={this.handleClick.bind(this)} />
+              <RaisedButton label={multi_text["question_answers_text"]["send"]} primary={true} onClick={this.handleClick.bind(this)} />
               </div>
             : null
         }
