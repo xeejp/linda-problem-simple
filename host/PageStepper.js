@@ -5,7 +5,7 @@ import { Step, Stepper, StepButton} from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import { changePage } from './actions'
-import { getPage } from 'util/index'
+import { getPage } from '../util/index'
 
 import { ReadJSON, LineBreak } from '../util/ReadJSON'
 
